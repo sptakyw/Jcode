@@ -1,9 +1,21 @@
 {% extends "layout/base.html" %}
+
+{% load static %}
+
 {% block title %} Video Page {% endblock %}
 
 {% block content %}
-<div class="container">
 
+
+
+
+<div class="container">
+  <div class="card card-Banner mb-4">
+    <img class="Banner" src="{% static 'img/Banner.png' %}" alt="" >
+  </div>
+  <div class="mb-4">
+  <h6><b>คอร์สแนะนำ55</b></h6>
+  </div>
     <div class="row">
       {% for b in video_list %}
 
