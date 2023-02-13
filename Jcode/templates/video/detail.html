@@ -1,47 +1,6 @@
 {% extends "layout/base.html" %}
 
 {% block content %}
-<style>
-    .subnav{
-      padding: 60px 0;
-      background-color: #333;
-      color: #fff;
-    }
-    .subnav .pricetag{
-      float:right;
-    }
-    .video{
-      position: relative;
-    }
-    .video::before{
-      position: absolute;
-      content: "";
-      top: 0;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      background-color: rgba(0, 0, 0, 0.4);
-      transition: all 0.2s ease-in-out;
-    }
-    .video img{
-      width: 100%;
-      height: 100%;
-    }
-    .video .icon{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      color: rgba(255, 255, 255, 0.7);
-      transform: translate(-50%,-50%);
-      transition: all 0.2s ease-in-out;
-    }
-    .video:hover .icon{
-      color: rgba(255, 255, 255, 0.9);
-    }
-    .video:hover::before{
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-  </style>
 <div class="subnav mb-5">
     <div class="container">
       <div class="pricetag">
@@ -52,90 +11,58 @@
       <a href="{% url 'video:index' %}"class='text-white'><i class="fa fa-chevron-left"></i>ย้อนกลับ</a>
     </div>
   </div>
-  <div class="container">
-    <div class="row g-5">
-      <div class="col-lg-8">
-        <div class="video mb-5">
-          <img src="./img/course/05.jpg" alt="">
-          <a href="#">
-            <div class="icon">
-              <i class="far fa-circle-play fa-6x"></i>
-            </div>
-          </a>
-        </div>
-        {% regroup video.get_chapter_set_with_ordered by chapter as chapter_list %}
-        <ul>
-          {% for chapter in chapter_list %}
-            <li>{{ chapter.grouper }}
-              <ul>
-                {% for lesson in chapter.list %}
-                  <li>{{ lesson.name }}</li>
-                {% endfor %}
-              </ul>
-            </li>
-          {% endfor %}
-        </ul>
+  {% regroup video.get_chapter_set_with_ordered by chapter as chapter_list %}
+        {% if video.videoexample %}
+        <video id="videoplayer" controls width="400" height="300">
+          <source src="http://192.168.1.57:8000{{video.videoexample.url}}" type="video/mp4" >
+          Your browser does not support HTML5 video.
+        </video>
+        {% endif %}
+        <div class="row g-5">
+          <div class="col-lg-8">
+            <div class="accordion mb-5" id="accordionExample">
+              {% for chapter in chapter_list %}
+                <div class="card">
+                  <div class="card-header" id="heading{{ forloop.counter }}">
 
-        <div class="accordion" id="accordionExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                การติดตั้ง
-              </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <table class="table table-bordered">
-                <tbody>
-                  <tr>
-                    <td>Lesson1 : การติดตั้ง Python</td>
-                    <td><i class="far fa-clock"></i> 12:02</td>
-                    <td>
-                      <a href="#" class="btn btn-warning btn-sm"><i class="far fa-circle-play"></i> Play</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Lesson2 : การติดตั้ง Visual Studio Code</td>
-                    <td><i class="far fa-clock"></i> 12:02</td>
-                    <td>
-                      <a href="#" class="btn btn-warning btn-sm"><i class="far fa-circle-play"></i> Play</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Lesson3 : การติดตั้ง Flask Library</td>
-                    <td><i class="far fa-clock"></i> 12:02</td>
-                    <td>
-                      <a href="#" class="btn btn-secondary btn-sm disabled"><i class="fa fa-lock"></i></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Lesson4 : การติดตั้ง Requirements ต่างๆ</td>
-                    <td><i class="far fa-clock"></i> 12:02</td>
-                    <td>
-                      <a href="#" class="btn btn-secondary btn-sm disabled"><i class="fa fa-lock"></i></a>
-                    </td>
-                  </tr>
-                </table>
-                </tbody>
-              </div>
+                      <button class="btn " type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+                        {{ chapter.grouper }}
+                      </button>
+
+                  </div>
+
+                  <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
+                    <div class="card-body">
+                      <table class="table table-bordered table-hover">
+                        <tbody>
+                          {% for lesson in chapter.list %}
+                            <tr>
+                              <td>{{ lesson.name }}</td>
+                              <td><i class="far fa-clock"></i> {{ lesson.duration_time }}</td>
+                              {% if lesson.lessonvideo %}
+                              {% if lesson.is_locked == False %}
+                                <td><button videourl='http://192.168.1.57:8000{{lesson.lessonvideo.url}}' class="btn-play"><i class="far fa-circle-play"></i>videoplay</button></td>
+                              {% elif lesson.is_locked == True %}
+                                <td><i class="fa fa-lock"></i></td>
+                              {% endif %}
+                              {% endif %}
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
             </div>
-          </div>
       </div>
+    </div>
+
       <div class="col-lg-4">
         <a href="#"class='btn btn-success btn-lg py-3 w-100'>สั่งซื้อคอร์สนี้</a>
         <div class="my-4">
           <h5>รายละเอียด</h5>
-          test
-        </div>
-        <div class="my-5">
-          <h5>คุณจะได้เรียนรู้เกี่ยวกับ</h5>
-          <ul>
-            <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
-            <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
-            <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
-            <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
-            <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
-          </ul>
+          {{ video.description }}
         </div>
         <div class="profile my-4">
           <h4>ประวัติผู้สอน</h4>
@@ -143,8 +70,7 @@
         </div>
       </div>
 
-    </div>
-  </div>
+
   <div class="container">
     <div class="row mb-4">
         <div class="col-lg-3">
@@ -156,21 +82,11 @@
             <h1>{{ video.name }}</h1>
             <strong>Author</strong>
             <span class="">{{ video.member }}</span>
-            <div class="mt-4 mb-4">{{ video.description }}</div>
+            <div class="mt-4 mb-4"></div>
             <h5 class="mb-4">฿ {{ video.price }} {{video.member.description}}</h5>
             <img src="{{video.member.Profile_image.url}}" alt="" >
-            {% for chapter in video_lists %}
-            <div>{{ chapter }}</div>
-            {% endfor %}
-            {% for chapter in video.videochapter_set.all %}
-            <div>{{ chapter.name }}</div>
-            {% endfor %}
-            {% for lesson in video.videolesson_set.all %}
-            <div>{{ lesson.name }} {{ lesson.is_locked }}</div>
-            {% endfor %}
         </div>
     </div>
-
-    <a href="{% url 'video:index' %}">Back to List</a>
   </div>
+
 {% endblock %}

@@ -13,7 +13,9 @@ urlpatterns = [
     path('deletechapter/<int:id>', views.chapter_delete, name='chapter_delete'),
     path('deletelesson/<int:id>', views.lesson_delete, name='lesson_delete'),
     path('updatevideo/<int:id>',views.update_video,name='update_course'),
-    re_path(r'add/$', views.video_add, name='video_add'),
-    re_path(r'addchapter/$', views.video_addchapter, name='video_addchapter'),
-    re_path(r'addlesson/$', views.video_addlesson, name='video_addlesson'),
+    path('updatechapter/<int:id>',views.update_chapter,name='update_chapter'),
+    path('updatelesson/<int:id>',views.update_lesson,name='update_lesson'),
+    path('add/<int:id>', views.video_add, name='video_add'),
+    path('addchapter/<int:id>', views.video_addchapter, name='video_addchapter'),
+    path('addlesson/<int:id>', views.video_addlesson, name='video_addlesson'),
 ]

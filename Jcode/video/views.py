@@ -23,12 +23,12 @@ def management_course(request):
 
 def management_chapter(request,id):
     chapters = VideoChapter.objects.filter(video__id=id)
-    return render(request,'video/chapter.html',{"chapters_list":chapters})
+    return render(request,'video/chapter.html',{"chapters_list":chapters,"ids":id})
 
 
 def management_lesson(request,id):
     lesson = VideoLesson.objects.filter(chapter__id=id)
-    return render(request,'video/lesson.html',{"lesson_list":lesson})
+    return render(request,'video/lesson.html',{"lesson_list":lesson,"ids":id})
 
 
 def video_add(request):
@@ -55,16 +55,13 @@ class BookDetailView(DetailView):
     template_name = 'video/detail.html'
     slug_url_kwarg = 'slug'
 
-def video_addchapter(request):
+def video_addchapter(request,id):
     form = VideochapterForm()
-
     if request.method == 'POST':
-        form = VideoForm(request.POST, request.FILES)
+        form = VideochapterForm(request.POST, request.FILES)
         if form.is_valid():
-            video = form.save(commit=False)
-            video.slug = slugify(video.name)
-            video.published = True
-            video.save()
+            chapter = form.save(commit=False)
+            chapter.save()
             form.save_m2m()
             messages.success(request, 'Save success')
             return HttpResponseRedirect(reverse('video:index', kwargs={}))
@@ -73,15 +70,13 @@ def video_addchapter(request):
         'form': form,
     })
 
-def video_addlesson(request):
+def video_addlesson(request,id):
     form = VideolessonForm()
 
     if request.method == 'POST':
-        form = VideoForm(request.POST, request.FILES)
+        form = VideolessonForm(request.POST, request.FILES)
         if form.is_valid():
             video = form.save(commit=False)
-            video.slug = slugify(video.name)
-            video.published = True
             video.save()
             form.save_m2m()
             messages.success(request, 'Save success')
@@ -125,3 +120,26 @@ def update_video(request, id):
     else:
         form = VideoForm(instance=videos)
     return render(request, 'video/update_video.html', {'form': form})
+
+def update_chapter(request, id):
+    chapters= VideoChapter.objects.get(id=id)
+    if request.method == 'POST':
+        form = VideochapterForm(request.POST,  instance=chapters)
+        if form.is_valid():
+            form.save()
+            return redirect('video:management_course')
+    else:
+        form = VideochapterForm(instance=chapters)
+    return render(request, 'video/update_chapter.html', {'form': form})
+
+def update_lesson(request, id):
+    lessons= VideoLesson.objects.get(id=id)
+
+    if request.method == 'POST':
+        form = VideolessonForm(request.POST,  instance=lessons)
+        if form.is_valid():
+            form.save()
+            return redirect('video:management_course')
+    else:
+        form = VideolessonForm(instance=lessons)
+    return render(request, 'video/update_lesson.html', {'form': form})

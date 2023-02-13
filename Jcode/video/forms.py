@@ -9,9 +9,9 @@ class VideoForm(forms.ModelForm):
 class VideochapterForm(forms.ModelForm):
     class Meta:
         model = VideoChapter
-        exclude = ['id', 'created', 'updated']
+        exclude = ['id','video', 'created', 'updated']
 
 class VideolessonForm(forms.ModelForm):
     class Meta:
         model = VideoLesson
-        exclude = ['id', 'created', 'updated']
+        exclude = ['id','videos','chapter', 'created', 'updated']

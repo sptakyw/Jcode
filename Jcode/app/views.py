@@ -4,7 +4,7 @@ from django.contrib.auth import login,logout
 from django.contrib.auth.models import AbstractUser
 from video.models import Video,VideoLesson
 from .models import Category,CategorySub
-
+from .forms import EmailAuthenticationForm
 # Create your views here.
 def index(request):
     video = Video.objects.filter(published=True)
@@ -13,13 +13,15 @@ def index(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = EmailAuthenticationForm(data=request.POST)
+        
         if form.is_valid():
             user = form.get_user()
             login(request,user)
             return redirect('video:index')
     else:
-        form = AuthenticationForm()
+        form = EmailAuthenticationForm()
+        print(form)
     return render(request,'account/login.html',{
             'form':form
         })

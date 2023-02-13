@@ -8,7 +8,8 @@
         <div class="col-lg-8 offset-lg-2">
           <h3 style="text-align: center;"><b>จัดการบทเรียน</b></h3>
           <div style="text-align: center;">
-            <button type="submit" class="btn btn-addlesson mt-2">เพิ่มบทเรียน</button>
+            <a class="btn btn-addlesson mt-2" href="{% url 'video:video_addlesson' id=ids %}">เพิ่มบทเรียน</a>
+            {{ids}}
           </div>
           <table class="my-4">
             <tr>
@@ -32,7 +33,7 @@
               <td style="color:#0CB009">Free</td>
               {% endif %}
               <td>{{ lesson.ordered }}</td>
-              <td>แก้ไข</td>
+              <td><a href="{% url 'video:update_lesson' id=lesson.id %}">แก้ไข</a> </td>
               <td><a href="{% url 'video:lesson_delete' id=lesson.id %}" style="color: #FF0404;">ลบ</a></td>
             </tr>
             {% endfor %}

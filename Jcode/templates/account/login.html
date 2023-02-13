@@ -11,14 +11,13 @@
         <h2 class="mt-4"><b> SIGN IN </b></h2>
         <form method="post" novalidate>
             {% csrf_token %}
-            {{form}}
             <div class="mb-2">
-              <label for="exampleFormControlInput1" class="form-label" style="font-size: 14px;">อีเมล์</label>
-              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Email">
+              <label for="id_username" class="form-label" style="font-size: 14px;">อีเมล์</label>
+              <input type="email"  class="form-control" name="username" maxlength="150" required id="id_username" placeholder="Email">
             </div>
             <div class="mb-1">
-              <label for="inputPassword2" class="form-label" style="font-size: 14px;">รหัสผ่าน</label>
-              <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+              <label for="id_password" class="form-label" style="font-size: 14px;">รหัสผ่าน</label>
+              <input type="password"  class="form-control" name="password" autocomplete="current-password" required id="id_password" placeholder="Password">
             </div>
             <div class="forgetpassword">
               <a href="#">ลืมรหัสผ่าน</a>
