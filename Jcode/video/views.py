@@ -30,10 +30,13 @@ def management_lesson(request,id):
     lesson = VideoLesson.objects.filter(chapter__id=id)
     return render(request,'video/lesson.html',{"lesson_list":lesson,"ids":id})
 
+class BookDetailView(DetailView):
+    model = Video
+    template_name = 'video/detail.html'
+    slug_url_kwarg = 'slug'
 
 def video_add(request):
     form = VideoForm()
-
     if request.method == 'POST':
         form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
@@ -50,11 +53,6 @@ def video_add(request):
         'form': form,
     })
 
-class BookDetailView(DetailView):
-    model = Video
-    template_name = 'video/detail.html'
-    slug_url_kwarg = 'slug'
-
 def video_addchapter(request,id):
     form = VideochapterForm()
     if request.method == 'POST':
@@ -66,7 +64,7 @@ def video_addchapter(request,id):
             messages.success(request, 'Save success')
             return HttpResponseRedirect(reverse('video:index', kwargs={}))
         messages.error(request, 'Save Failed!')
-    return render(request, 'video/add.html', {
+    return render(request, 'video/add_chapter.html', {
         'form': form,
     })
 
@@ -82,7 +80,7 @@ def video_addlesson(request,id):
             messages.success(request, 'Save success')
             return HttpResponseRedirect(reverse('video:index', kwargs={}))
         messages.error(request, 'Save Failed!')
-    return render(request, 'video/add.html', {
+    return render(request, 'video/add_lesson.html', {
         'form': form,
     })
 

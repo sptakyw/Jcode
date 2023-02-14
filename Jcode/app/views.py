@@ -14,11 +14,11 @@ def index(request):
 def login_view(request):
     if request.method == 'POST':
         form = EmailAuthenticationForm(data=request.POST)
-        
+
         if form.is_valid():
             user = form.get_user()
             login(request,user)
-            return redirect('video:index')
+            return redirect('app:index')
     else:
         form = EmailAuthenticationForm()
         print(form)

@@ -15,7 +15,7 @@ urlpatterns = [
     path('updatevideo/<int:id>',views.update_video,name='update_course'),
     path('updatechapter/<int:id>',views.update_chapter,name='update_chapter'),
     path('updatelesson/<int:id>',views.update_lesson,name='update_lesson'),
-    path('add/<int:id>', views.video_add, name='video_add'),
+    path('add/', views.video_add, name='video_add'),
     path('addchapter/<int:id>', views.video_addchapter, name='video_addchapter'),
     path('addlesson/<int:id>', views.video_addlesson, name='video_addlesson'),
 ]
