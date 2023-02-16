@@ -4,7 +4,7 @@
 
 
 <h3 style="text-align: center;"><b>แก้ไข chapter</b></h3>
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" action="?courseid={{courseid}}">
     {% csrf_token %}
     <div style="text-align: center;">
     {{ form.as_p }}

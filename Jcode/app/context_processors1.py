@@ -1,4 +1,4 @@
-from app.models import Category,CategorySub
+from app.models import Category,CategorySub,Member
 from django import template
 
 def category_list(request):
@@ -12,3 +12,9 @@ def category_list(request):
     # on every request call or every page.'
     return context
 
+def member_list(request):
+    members=Member.objects.filter(user_id=request.user.id).first()
+    context={
+        'member_list':members
+    }
+    return context

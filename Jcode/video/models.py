@@ -18,10 +18,13 @@ class Video(models.Model):
 
     def get_chapter_set_with_ordered(self):
         return self.videolesson_set.order_by('chapter__ordered','ordered')
-    
+
     def __str__(self):
         return self.name
 
+    @classmethod
+    def search(cls, query):
+        return cls.objects.filter(title__icontains=query) | cls.objects.filter(content__icontains=query)
 
 
 class VideoChapter(models.Model):
